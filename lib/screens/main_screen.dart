@@ -50,10 +50,29 @@ class _MainScreenState extends State<MainScreen> {
   List<int> listOfNoOfMatchesSecondGuess = [];
   List<int> listOfNoOfMatchesThirdGuess = [];
   List<String> listOfWords = [];
+  List<bool> firstGuessResults = [];
+  List<bool> secondGuessResults = [];
+  List<bool> thirdGuessResults = [];
 
   bool failedSecondAttempt = false;
   bool failedThirdAttempt = false;
   int noOfAttempts = 1;
+void upDateNoOfAttempts(){
+  if(failedSecondAttempt && !failedThirdAttempt) {
+    setState(() {
+      noOfAttempts = 2;
+    });
+  } else if(failedSecondAttempt && failedThirdAttempt){
+    setState(() {
+      noOfAttempts = 3;
+    });
+  } else {
+    setState(() {
+      noOfAttempts = 1;
+    });
+  }
+  print(noOfAttempts);
+}
 
   @override
   void initState() {
@@ -79,6 +98,23 @@ class _MainScreenState extends State<MainScreen> {
     }
     super.dispose();
   }
+  List<bool> compareIntToList(int singleInteger, List<int> integerList) {
+    List<bool> results = [];
+
+    // Iterate through each integer in the list
+    for (int number in integerList) {
+      // Compare the single integer to the current integer in the list
+      if (singleInteger == number) {
+        // If they are the same, add true to the results list
+        results.add(true);
+      } else {
+        // Otherwise, add false to the results list
+        results.add(false);
+      }
+    }
+    // Return the list of results
+    return results;
+  }
 
   void _navigateAndClearList(BuildContext context) async {
     // Navigate to another screen and wait for the result
@@ -86,17 +122,14 @@ class _MainScreenState extends State<MainScreen> {
       context,
       MaterialPageRoute(
           builder: (context) => Results(
-              failedSecondAttempt: failedSecondAttempt,
-              failedThirdAttempt: failedThirdAttempt,
-              listOfWords: listOfWords,
-              listOfNoOfMatchesFirstGuess: listOfNoOfMatchesFirstGuess,
-              listOfNoOfMatchesSecondGuess: listOfNoOfMatchesSecondGuess,
-              listOfNoOfMatchesThirdGuess: listOfNoOfMatchesThirdGuess,
-            noOfMatchesFirstChoice: noOfMatchesFirstChoice,
-            noOfMatchesSecondChoice: noOfMatchesSecondChoice,
-            noOfMatchesThirdChoice: noOfMatchesThirdChoice,
-
-          )),
+                failedSecondAttempt: failedSecondAttempt,
+                failedThirdAttempt: failedThirdAttempt,
+                listOfWords: listOfWords,
+                noOfAttempts: noOfAttempts,
+            firstGuessResults: firstGuessResults,
+            secondGuessResults: secondGuessResults,
+            thirdGuessResults: thirdGuessResults,
+              )),
     );
 
     // Perform action after Navigator.pop
@@ -106,6 +139,9 @@ class _MainScreenState extends State<MainScreen> {
       listOfNoOfMatchesFirstGuess.clear();
       listOfNoOfMatchesSecondGuess.clear();
       listOfNoOfMatchesThirdGuess.clear();
+      firstGuessResults.clear();
+      secondGuessResults.clear();
+      thirdGuessResults.clear();
     }
   }
 
@@ -193,7 +229,6 @@ class _MainScreenState extends State<MainScreen> {
                   onPressed: () {
                     setState(() {
                       failedSecondAttempt = !failedSecondAttempt;
-                      noOfAttempts = 2;
                       listOfNoOfMatchesFirstGuess = [];
                       listOfNoOfMatchesSecondGuess = [];
                       listOfNoOfMatchesThirdGuess = [];
@@ -236,7 +271,6 @@ class _MainScreenState extends State<MainScreen> {
                   onPressed: () {
                     setState(() {
                       failedThirdAttempt = !failedThirdAttempt;
-                      noOfAttempts = 3;
                       listOfNoOfMatchesFirstGuess = [];
                       listOfNoOfMatchesSecondGuess = [];
                       listOfNoOfMatchesThirdGuess = [];
@@ -273,11 +307,33 @@ class _MainScreenState extends State<MainScreen> {
           ReusableButton(
             const Text('Predict'),
             () {
+              if(failedSecondAttempt){
+                if (noOfMatchesControllerSecondChoice.text.isEmpty ||
+                    secondChoiceController.text.isEmpty){
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Enter second choice and match'),
+                      duration: Duration(seconds: 1),
+                    ),
+                  );
+                }
+              }
+              if(failedThirdAttempt){
+                if (noOfMatchesControllerThirdChoice.text.isEmpty ||
+                    thirdChoiceController.text.isEmpty){
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Enter third choice and match'),
+                      duration: Duration(seconds: 1),
+                    ),
+                  );
+                }
+              }
               if (noOfMatchesControllerFirstChoice.text.isEmpty ||
                   firstChoiceController.text.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text('Please check entries'),
+                    content: Text('Enter first choice and match'),
                     duration: Duration(seconds: 1),
                   ),
                 );
@@ -296,17 +352,17 @@ class _MainScreenState extends State<MainScreen> {
                         thirdChoiceController.text, controllers[i].text));
                   }
                 }
-
-                // Navigator.push(context, MaterialPageRoute(builder: (context) {
-                //   return Results(
-                //     failedSecondAttempt: failedSecondAttempt,
-                //     failedThirdAttempt: failedThirdAttempt,
-                //     listOfWords: listOfWords,
-                //     listOfNoOfMatchesFirstGuess: listOfNoOfMatchesFirstGuess,
-                //     listOfNoOfMatchesSecondGuess: listOfNoOfMatchesSecondGuess,
-                //     listOfNoOfMatchesThirdGuess: listOfNoOfMatchesThirdGuess,
-                //   );
-                // }));
+                upDateNoOfAttempts();
+                firstGuessResults =compareIntToList(
+                    noOfMatchesFirstChoice, listOfNoOfMatchesFirstGuess);
+                if (failedSecondAttempt == true) {
+                  secondGuessResults = compareIntToList(
+                      noOfMatchesSecondChoice, listOfNoOfMatchesSecondGuess);
+                }
+                if (failedThirdAttempt == true) {
+                  thirdGuessResults = compareIntToList(
+                      noOfMatchesThirdChoice,listOfNoOfMatchesThirdGuess);
+                }
                 _navigateAndClearList(context);
               }
             },
