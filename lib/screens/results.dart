@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable, deprecated_member_use
 
+import 'package:clean_helminal/widgets/constants.dart';
 import 'package:flutter/material.dart';
 
 class Results extends StatefulWidget {
@@ -74,50 +75,141 @@ class _ResultsState extends State<Results> {
                       },
                       child: const Text('Close')),
                 ),
-                for (int i = 0; i < widget.listOfWords.length; i++)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        widget.listOfWords[i],
-                        style: TextStyle(
-                          color: widget.firstGuessResults[i] == true
-                              ? Colors.green
-                              : Colors.redAccent,
-                        ),
+                addVerticalSpacing(20),
+                // for (int i = 0; i < widget.listOfWords.length; i++)
+                //   Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     crossAxisAlignment: CrossAxisAlignment.center,
+                //     children: [
+                //       Text(
+                //         widget.listOfWords[i],
+                //         style: TextStyle(
+                //           color: widget.firstGuessResults[i] == true
+                //               ? Colors.green
+                //               : Colors.redAccent,
+                //         ),
+                //       ),
+                //       widget.failedSecondAttempt
+                //           ? Text(
+                //               widget.listOfWords[i],
+                //               style: TextStyle(
+                //                 color: widget.secondGuessResults[i] == true
+                //                     ? Colors.green
+                //                     : Colors.redAccent,
+                //               ),
+                //             )
+                //           : Container(),
+                //       widget.failedThirdAttempt
+                //           ? Text(
+                //               widget.listOfWords[i],
+                //               style: TextStyle(
+                //                 color: widget.thirdGuessResults[i] == true
+                //                     ? Colors.green
+                //                     : Colors.redAccent,
+                //               ),
+                //             )
+                //           : Container(),
+                //     if(!widget.failedSecondAttempt && !widget.failedThirdAttempt)  checkFirstList(widget.firstGuessResults[i]),
+                //       if (widget.failedSecondAttempt && !widget.failedThirdAttempt)
+                //         checkFirstAndSecondList(widget.firstGuessResults[i],
+                //             widget.secondGuessResults[i]),
+                //       if (widget.failedThirdAttempt && widget.failedSecondAttempt)
+                //         checkFirstSecondAndThirdList(
+                //             widget.firstGuessResults[i],
+                //             widget.secondGuessResults[i],
+                //             widget.thirdGuessResults[i]),
+                //
+                //
+                //     ],
+                //   ),
+                    // add table view as well using the table widget
+                    Table(
+                      border: TableBorder.all(
+                        color: Colors.black,
+                        width: 1,
+                        style: BorderStyle.solid,
                       ),
-                      widget.failedSecondAttempt
-                          ? Text(
-                              widget.listOfWords[i],
-                              style: TextStyle(
-                                color: widget.secondGuessResults[i] == true
-                                    ? Colors.green
-                                    : Colors.redAccent,
+                      children: const [
+                        TableRow(
+                          children: [
+                            TableCell(
+                              child: Text(
+                                'First Attempt',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            )
-                          : Container(),
-                      widget.failedThirdAttempt
-                          ? Text(
-                              widget.listOfWords[i],
-                              style: TextStyle(
-                                color: widget.thirdGuessResults[i] == true
-                                    ? Colors.green
-                                    : Colors.redAccent,
+                            ),
+                            TableCell(
+                              child: Text(
+                                'Second Attempt',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            )
-                          : Container(),
-                    if(!widget.failedSecondAttempt && !widget.failedThirdAttempt)  checkFirstList(widget.firstGuessResults[i]),
-                      if (widget.failedSecondAttempt && !widget.failedThirdAttempt)
-                        checkFirstAndSecondList(widget.firstGuessResults[i],
-                            widget.secondGuessResults[i]),
-                      if (widget.failedThirdAttempt && widget.failedSecondAttempt)
-                        checkFirstSecondAndThirdList(
-                            widget.firstGuessResults[i],
-                            widget.secondGuessResults[i],
-                            widget.thirdGuessResults[i]),
-                    ],
-                  ),
+                            ),
+                            TableCell(
+                              child: Text(
+                                'Third Attempt',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                    for (int i = 0; i < widget.listOfWords.length; i++)
+
+                      Table(
+                        border: TableBorder.all(
+                          color: Colors.black,
+                          width: 1,
+                          style: BorderStyle.solid,
+                        ),
+                      children: [
+                        TableRow(
+                          children: [
+                            TableCell(
+                              child: Text(
+                                widget.listOfWords[i],
+                                style: TextStyle(
+                                  color: widget.firstGuessResults[i] == true
+                                     ? Colors.green
+                                      : Colors.redAccent,
+                                ),
+                              ),
+                            ),
+                        widget.failedSecondAttempt? TableCell(
+                              child: Text(
+                                widget.listOfWords[i],
+                                style: TextStyle(
+                                  color: widget.secondGuessResults[i] == true
+                                     ? Colors.green
+                                      : Colors.redAccent,
+                                ),
+                              ),
+                            ): Container(),
+                           widget.failedThirdAttempt ?TableCell(
+                              child: Text(
+                                 widget.listOfWords[i],
+                                style: TextStyle(
+                                  color: widget.thirdGuessResults[i] == true
+                                     ? Colors.green
+                                      : Colors.redAccent,
+                                ),
+                              ),
+                            ): Container(),
+                          ],
+                        ),
+                      ]
+                    ),
+
+
               ]),
             ),
           ),

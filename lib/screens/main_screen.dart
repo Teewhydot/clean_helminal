@@ -369,6 +369,7 @@ void upDateNoOfAttempts(){
             Colors.blue,
           ),
           addVerticalSpacing(100),
+
         ],
       ),
     );
