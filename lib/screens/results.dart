@@ -35,20 +35,20 @@ class _ResultsState extends State<Results> {
 
   Widget checkFirstList(bool result) {
     return result == true
-        ? const Icon(Icons.check, color: Colors.green)
+        ? const TableCell(child: Icon(Icons.check_box, color: Colors.green))
         : Container();
   }
 
   Widget checkFirstAndSecondList(bool firstResult, secondResult) {
     return firstResult == true && secondResult == true
-        ? const Icon(Icons.check, color: Colors.green)
+        ? const TableCell(child: Icon(Icons.check_box, color: Colors.green))
         : Container();
   }
 
   Widget checkFirstSecondAndThirdList(
       bool firstResult, secondResult, thirdResult) {
     return firstResult == true && secondResult == true && thirdResult == true
-        ? const Icon(Icons.check, color: Colors.green)
+        ? const TableCell(child: Icon(Icons.check_box, color: Colors.green))
         : Container();
   }
 
@@ -109,17 +109,7 @@ class _ResultsState extends State<Results> {
                 //               ),
                 //             )
                 //           : Container(),
-                //     if(!widget.failedSecondAttempt && !widget.failedThirdAttempt)  checkFirstList(widget.firstGuessResults[i]),
-                //       if (widget.failedSecondAttempt && !widget.failedThirdAttempt)
-                //         checkFirstAndSecondList(widget.firstGuessResults[i],
-                //             widget.secondGuessResults[i]),
-                //       if (widget.failedThirdAttempt && widget.failedSecondAttempt)
-                //         checkFirstSecondAndThirdList(
-                //             widget.firstGuessResults[i],
-                //             widget.secondGuessResults[i],
-                //             widget.thirdGuessResults[i]),
-                //
-                //
+
                 //     ],
                 //   ),
                     // add table view as well using the table widget
@@ -129,12 +119,13 @@ class _ResultsState extends State<Results> {
                         width: 1,
                         style: BorderStyle.solid,
                       ),
+                      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                       children: const [
                         TableRow(
                           children: [
                             TableCell(
                               child: Text(
-                                'First Attempt',
+                                '1st Attempt',
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
@@ -143,7 +134,7 @@ class _ResultsState extends State<Results> {
                             ),
                             TableCell(
                               child: Text(
-                                'Second Attempt',
+                                '2nd Attempt',
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
@@ -152,7 +143,16 @@ class _ResultsState extends State<Results> {
                             ),
                             TableCell(
                               child: Text(
-                                'Third Attempt',
+                                '3rd Attempt',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            TableCell(
+                              child: Text(
+                                'Result',
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
@@ -204,6 +204,15 @@ class _ResultsState extends State<Results> {
                                 ),
                               ),
                             ): Container(),
+                            if(!widget.failedSecondAttempt && !widget.failedThirdAttempt)  checkFirstList(widget.firstGuessResults[i]),
+                            if (widget.failedSecondAttempt && !widget.failedThirdAttempt)
+                              checkFirstAndSecondList(widget.firstGuessResults[i],
+                                  widget.secondGuessResults[i]),
+                            if (widget.failedThirdAttempt && widget.failedSecondAttempt)
+                              checkFirstSecondAndThirdList(
+                                  widget.firstGuessResults[i],
+                                  widget.secondGuessResults[i],
+                                  widget.thirdGuessResults[i]),
                           ],
                         ),
                       ]
