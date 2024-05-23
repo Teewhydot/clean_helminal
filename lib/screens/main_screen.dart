@@ -57,22 +57,22 @@ class _MainScreenState extends State<MainScreen> {
   bool failedSecondAttempt = false;
   bool failedThirdAttempt = false;
   int noOfAttempts = 1;
-void upDateNoOfAttempts(){
-  if(failedSecondAttempt && !failedThirdAttempt) {
-    setState(() {
-      noOfAttempts = 2;
-    });
-  } else if(failedSecondAttempt && failedThirdAttempt){
-    setState(() {
-      noOfAttempts = 3;
-    });
-  } else {
-    setState(() {
-      noOfAttempts = 1;
-    });
+  void upDateNoOfAttempts() {
+    if (failedSecondAttempt && !failedThirdAttempt) {
+      setState(() {
+        noOfAttempts = 2;
+      });
+    } else if (failedSecondAttempt && failedThirdAttempt) {
+      setState(() {
+        noOfAttempts = 3;
+      });
+    } else {
+      setState(() {
+        noOfAttempts = 1;
+      });
+    }
+    print(noOfAttempts);
   }
-  print(noOfAttempts);
-}
 
   @override
   void initState() {
@@ -98,6 +98,7 @@ void upDateNoOfAttempts(){
     }
     super.dispose();
   }
+
   List<bool> compareIntToList(int singleInteger, List<int> integerList) {
     List<bool> results = [];
 
@@ -126,9 +127,9 @@ void upDateNoOfAttempts(){
                 failedThirdAttempt: failedThirdAttempt,
                 listOfWords: listOfWords,
                 noOfAttempts: noOfAttempts,
-            firstGuessResults: firstGuessResults,
-            secondGuessResults: secondGuessResults,
-            thirdGuessResults: thirdGuessResults,
+                firstGuessResults: firstGuessResults,
+                secondGuessResults: secondGuessResults,
+                thirdGuessResults: thirdGuessResults,
               )),
     );
 
@@ -307,69 +308,65 @@ void upDateNoOfAttempts(){
           ReusableButton(
             const Text('Predict'),
             () {
-              if(failedSecondAttempt){
-                if (noOfMatchesControllerSecondChoice.text.isEmpty ||
-                    secondChoiceController.text.isEmpty){
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Enter second choice and match'),
-                      duration: Duration(seconds: 1),
-                    ),
-                  );
-                }
-              }
-              if(failedThirdAttempt){
-                if (noOfMatchesControllerThirdChoice.text.isEmpty ||
-                    thirdChoiceController.text.isEmpty){
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Enter third choice and match'),
-                      duration: Duration(seconds: 1),
-                    ),
-                  );
-                }
-              }
+              // analysis happens here
+
               if (noOfMatchesControllerFirstChoice.text.isEmpty ||
                   firstChoiceController.text.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text('Enter first choice and match'),
-                    duration: Duration(seconds: 1),
-                  ),
+                      content: Text('First field must not be empty')),
                 );
-              } else {
-                // analysis happens here
-                for (int i = 0; i < 20; i++) {
-                  listOfWords.add(controllers[i].text);
-                  listOfNoOfMatchesFirstGuess.add(countMatchingLetters(
-                      firstChoiceController.text, controllers[i].text));
-                  if (failedSecondAttempt == true) {
-                    listOfNoOfMatchesSecondGuess.add(countMatchingLetters(
-                        secondChoiceController.text, controllers[i].text));
-                  }
-                  if (failedThirdAttempt == true) {
-                    listOfNoOfMatchesThirdGuess.add(countMatchingLetters(
-                        thirdChoiceController.text, controllers[i].text));
-                  }
-                }
-                upDateNoOfAttempts();
-                firstGuessResults =compareIntToList(
-                    noOfMatchesFirstChoice, listOfNoOfMatchesFirstGuess);
+                return;
+              }
+
+              if (failedSecondAttempt &&
+                  noOfMatchesControllerSecondChoice.text.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                      content: Text('Second field must not be empty')),
+                );
+                return;
+              }
+
+              if (failedThirdAttempt &&
+                  noOfMatchesControllerThirdChoice.text.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                      content: Text('Third field must not be empty')),
+                );
+                return;
+              }
+
+              // If all conditions are met, process words
+              for (int i = 0; i < 20; i++) {
+                listOfWords.add(controllers[i].text);
+                listOfNoOfMatchesFirstGuess.add(countMatchingLetters(
+                    firstChoiceController.text, controllers[i].text));
                 if (failedSecondAttempt == true) {
-                  secondGuessResults = compareIntToList(
-                      noOfMatchesSecondChoice, listOfNoOfMatchesSecondGuess);
+                  listOfNoOfMatchesSecondGuess.add(countMatchingLetters(
+                      secondChoiceController.text, controllers[i].text));
                 }
                 if (failedThirdAttempt == true) {
-                  thirdGuessResults = compareIntToList(
-                      noOfMatchesThirdChoice,listOfNoOfMatchesThirdGuess);
+                  listOfNoOfMatchesThirdGuess.add(countMatchingLetters(
+                      thirdChoiceController.text, controllers[i].text));
                 }
-                _navigateAndClearList(context);
               }
+              upDateNoOfAttempts();
+              firstGuessResults = compareIntToList(
+                  noOfMatchesFirstChoice, listOfNoOfMatchesFirstGuess);
+              if (failedSecondAttempt == true) {
+                secondGuessResults = compareIntToList(
+                    noOfMatchesSecondChoice, listOfNoOfMatchesSecondGuess);
+              }
+              if (failedThirdAttempt == true) {
+                thirdGuessResults = compareIntToList(
+                    noOfMatchesThirdChoice, listOfNoOfMatchesThirdGuess);
+              }
+              _navigateAndClearList(context);
             },
             Colors.blue,
           ),
           addVerticalSpacing(100),
-
         ],
       ),
     );

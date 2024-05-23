@@ -76,43 +76,6 @@ class _ResultsState extends State<Results> {
                       child: const Text('Close')),
                 ),
                 addVerticalSpacing(20),
-                // for (int i = 0; i < widget.listOfWords.length; i++)
-                //   Row(
-                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //     crossAxisAlignment: CrossAxisAlignment.center,
-                //     children: [
-                //       Text(
-                //         widget.listOfWords[i],
-                //         style: TextStyle(
-                //           color: widget.firstGuessResults[i] == true
-                //               ? Colors.green
-                //               : Colors.redAccent,
-                //         ),
-                //       ),
-                //       widget.failedSecondAttempt
-                //           ? Text(
-                //               widget.listOfWords[i],
-                //               style: TextStyle(
-                //                 color: widget.secondGuessResults[i] == true
-                //                     ? Colors.green
-                //                     : Colors.redAccent,
-                //               ),
-                //             )
-                //           : Container(),
-                //       widget.failedThirdAttempt
-                //           ? Text(
-                //               widget.listOfWords[i],
-                //               style: TextStyle(
-                //                 color: widget.thirdGuessResults[i] == true
-                //                     ? Colors.green
-                //                     : Colors.redAccent,
-                //               ),
-                //             )
-                //           : Container(),
-
-                //     ],
-                //   ),
-                    // add table view as well using the table widget
                     Table(
                       border: TableBorder.all(
                         color: Colors.black,
