@@ -23,3 +23,66 @@ int countMatchingLetters(String str1, String str2) {
 
   return matches;
 }
+
+List<List<String>> groupWords(List<String> words) {
+  if (words.isEmpty) return [];
+
+  List<List<String>> result = [];
+  int wordLength = words[0].length;
+
+  for (int i = 0; i < wordLength; i++) {
+    Map<String, List<String>> groups = {};
+
+    // Group words by the character at the current position
+    for (var word in words) {
+      String key = word[i];
+      if (!groups.containsKey(key)) {
+        groups[key] = [];
+      }
+      groups[key]?.add(word);
+    }
+
+    // Add groups that have common matching letters to the result list
+    groups.forEach((key, group) {
+      if (group.length > 1) {
+        result.add(group);
+      }
+    });
+  }
+
+  // Remove duplicates from the result list
+  List<List<String>> uniqueResults = [];
+  for (var group in result) {
+    if (!uniqueResults.any((element) => _isSameGroup(element, group))) {
+      uniqueResults.add(group);
+    }
+  }
+
+  return uniqueResults;
+}
+
+bool _isSameGroup(List<String> group1, List<String> group2) {
+  if (group1.length != group2.length) return false;
+  for (var word in group1) {
+    if (!group2.contains(word)) return false;
+  }
+  return true;
+}
+
+
+List<String> removeEmptyStrings(List<String> words) {
+  words.removeWhere((word) => word.isEmpty);
+  return words;
+}
+
+Map<String, int> countStringOccurrences(List<List<String>> listOfLists) {
+  Map<String, int> stringOccurrences = {};
+
+  for (List<String> list in listOfLists) {
+    for (String str in list) {
+      stringOccurrences[str] = (stringOccurrences[str] ?? 0) + 1;
+    }
+  }
+
+  return stringOccurrences;
+}

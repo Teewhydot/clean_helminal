@@ -1,4 +1,5 @@
 import 'package:clean_helminal/logic/words_analysis.dart';
+import 'package:clean_helminal/screens/analysis_results.dart';
 import 'package:clean_helminal/screens/results.dart';
 import 'package:clean_helminal/widgets/constants.dart';
 import 'package:clean_helminal/widgets/custom_textfield.dart';
@@ -71,7 +72,6 @@ class _MainScreenState extends State<MainScreen> {
         noOfAttempts = 1;
       });
     }
-    print(noOfAttempts);
   }
 
   @override
@@ -117,7 +117,7 @@ class _MainScreenState extends State<MainScreen> {
     return results;
   }
 
-  void _navigateAndClearList(BuildContext context) async {
+  void _navigateAndClearResultsList(BuildContext context) async {
     // Navigate to another screen and wait for the result
     final result = await Navigator.push(
       context,
@@ -145,10 +145,33 @@ class _MainScreenState extends State<MainScreen> {
       thirdGuessResults.clear();
     }
   }
-
+  void _navigateAndClearAnalysisList(BuildContext context) async {
+    // Navigate to another screen and wait for the result
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => AnalysisResult(
+                groupWords(removeEmptyStrings(listOfWords)),
+          )),
+    );
+    // Perform action after Navigator.pop
+    if (result == true) {
+      // Clear the list
+      listOfWords.clear();
+      listOfNoOfMatchesFirstGuess.clear();
+      listOfNoOfMatchesSecondGuess.clear();
+      listOfNoOfMatchesThirdGuess.clear();
+      firstGuessResults.clear();
+      secondGuessResults.clear();
+      thirdGuessResults.clear();
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Word Analysis'),
+      ),
       body: ListView(
         shrinkWrap: true,
         children: [
@@ -327,12 +350,26 @@ class _MainScreenState extends State<MainScreen> {
                 );
                 return;
               }
+              if (failedSecondAttempt && secondChoiceController.text.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                      content: Text('Second field must not be empty')),
+                );
+                return;
+              }
 
               if (failedThirdAttempt &&
                   noOfMatchesControllerThirdChoice.text.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                       content: Text('Third field must not be empty')),
+                );
+                return;
+              }
+              if (failedThirdAttempt && thirdChoiceController.text.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                      content: Text('Second field must not be empty')),
                 );
                 return;
               }
@@ -362,10 +399,17 @@ class _MainScreenState extends State<MainScreen> {
                 thirdGuessResults = compareIntToList(
                     noOfMatchesThirdChoice, listOfNoOfMatchesThirdGuess);
               }
-              _navigateAndClearList(context);
+              _navigateAndClearResultsList(context);
             },
             Colors.blue,
           ),
+          addVerticalSpacing(50),
+          ReusableButton(const Text('Analyse'), () {
+            for (int i = 0; i < 20; i++) {
+              listOfWords.add(controllers[i].text);
+            }
+            _navigateAndClearAnalysisList(context);
+          }, Colors.green),
           addVerticalSpacing(100),
         ],
       ),

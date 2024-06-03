@@ -54,13 +54,13 @@ class _ResultsState extends State<Results> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: WillPopScope(
-        onWillPop: () async {
-          return false;
-        },
-        child: Scaffold(
-          body: Padding(
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+        body: SafeArea(
+          child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
